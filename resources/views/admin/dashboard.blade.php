@@ -125,23 +125,9 @@ saya mempunyai 2 code dashboard:"@extends('layouts.app')
                         <div class="icon">
                             <i class="fas fa-graduation-cap"></i>
                         </div>
-                        <a href="{{ route('admin.beasiswa.create') }}" class="btn btn-primary float-right"><i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{ route('admin.beasiswa.create') }}" class="small-box-footer">More info<i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-
-                <div class="col-lg-3 col-6">
-                    <div class="small-box bg-warning">
-                        <div class="inner">
-                            <h3>{{ $totalPeserta ?? 100 }}</h3>
-                            <p>Total Peserta</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <a href="{{ route('admin.peserta.index') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-
 
                 @if(auth()->check() && auth()->user()->role == 'admin')
                 <div class="col-lg-3 col-6">
