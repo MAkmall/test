@@ -60,7 +60,6 @@
                             <i class="nav-icon fas fa-edit"></i>
                             <p>
                                 Penilaian
-                                <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
                     </li>
