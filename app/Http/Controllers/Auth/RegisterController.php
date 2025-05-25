@@ -71,7 +71,7 @@ class RegisterController extends Controller
             'dokumen' => $dokumenPath,
         ]);
 
-        return redirect('/')->with('success', 'Registrasi berhasil!');
+        return redirect('/register')->with('success', 'Registrasi berhasil!');
     }
 
     /**
@@ -81,7 +81,7 @@ class RegisterController extends Controller
      */
     public function showRegisterForm()
     {
-        return view('page.auth.register');
+        return view('landing.register');
     }
 
     /**
@@ -102,7 +102,7 @@ class RegisterController extends Controller
         ]);
 
         // Proses registrasi peserta
-        $mahasiswa = ModelPeserta::create([
+        $mahasiswa = Peserta::create([
             'nama' => $request->input('name'),
             'jenkel' => $request->input('jenkel'),
             'no_hp' => $request->input('no_hp'),
@@ -137,12 +137,12 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return ModelPeserta::create([
+        return Peserta::create([
             'nama' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'telepon' => $data['telepon'],
-            'dokumen' => $data['dokumen'],
+            'telepon' => $data['telepon'] ?? null,
+            'dokumen' => $data['dokumen'] ?? null,
         ]);
     }
 }

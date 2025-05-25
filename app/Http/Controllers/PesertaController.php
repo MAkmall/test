@@ -16,7 +16,7 @@ class PesertaController extends Controller
         // Mengambil data peserta yang terkait dengan user yang sedang login
         $pesertas = Peserta::where('user_id', Auth::id())->get();
 
-        return view('admin.peserta.index', compact('pesertas'));
+        return view('admin.peserta', compact('pesertas'));
     }
 
     // Menampilkan form untuk membuat peserta baru

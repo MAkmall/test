@@ -59,5 +59,9 @@ class DashboardController extends Controller
         return redirect('/');
     }
 
-
+    public function peserta()
+    {
+        // Redirect ke halaman landing
+        return view('landing.dashboard');
+    }
 }
