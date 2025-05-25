@@ -36,14 +36,6 @@
 
                     <!-- Master Data -->
                     <li class="nav-header" style="font-size: 0.9rem; padding: 10px 15px; text-transform: uppercase; color: #6c757d; font-weight: 600;">KELOLA DATA</li>
-                    
-                    <!-- Beasiswa -->
-                    <li class="nav-item">
-                        <a href="{{ route('admin.beasiswa.index') }}" class="nav-link {{ request()->routeIs('admin.beasiswa.index') ? 'active' : '' }}" style="font-size: 16px; padding: 10px 15px;">
-                            <i class="nav-icon fas fa-graduation-cap"></i>
-                            <p>Kelola Beasiswa</p>
-                        </a>
-                    </li>
 
                     <!-- Kriteria -->
                     <li class="nav-item">
