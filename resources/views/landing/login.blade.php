@@ -341,26 +341,32 @@
             <i class="fas fa-check-circle"></i>
             Login berhasil! Mengalihkan...
         </div>
+        @if(session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
+        @foreach ($errors->all() as $error)
+            <div class="alert alert-danger">{{ $error }}</div>
+        @endforeach
+
+        <form method="POST" action="/login" data-parsley-validate>
+            @csrf
 
             <form method="POST" action="/login" data-parsley-validate>
-                    @csrf
-                    <div class="form-group position-relative has-icon-left mb-3">
-                        <input type="email" name="email" class="form-control form-control" placeholder="Email"
-                            data-parsley-type="email" data-parsley-error-message="Masukkan format email yang valid.">
-                        <div class="form-control-icon">
-                            <i class="bi bi-envelope"></i>
-                        </div>
+                @csrf
+                <div class="form-group position-relative has-icon-left mb-3">
+                    <input type="email" name="email" class="form-control" placeholder="Email" required>
+                    <div class="form-control-icon">
+                        <i class="bi bi-envelope"></i>
                     </div>
-                    <div class="form-group position-relative has-icon-left mb-3">
-                        <input type="password" name="password" class="form-control form-control" placeholder="Password"
-                            data-parsley-minlength="8"
-                            data-parsley-error-message="Kata sandi harus lebih besar dari atau sama dengan 8.">
-                        <div class="form-control-icon">
-                            <i class="bi bi-shield-lock"></i>
-                        </div>
+                </div>
+                <div class="form-group position-relative has-icon-left mb-3">
+                    <input type="password" name="password" class="form-control" placeholder="Password" required>
+                    <div class="form-control-icon">
+                        <i class="bi bi-shield-lock"></i>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block shadow-lg mt-3">Masuk</button>
-                </form>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block shadow-lg mt-3">Masuk</button>
+            </form>
 
             <div class="remember-forgot">
                 <a href="#" class="forgot-password">Lupa password?</a>
