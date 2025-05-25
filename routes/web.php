@@ -6,7 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BeasiswaController;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\PesertaController;
-use App\use App\Http\Controllers\PenilaianController;
+use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\AuthController;
@@ -35,6 +35,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::resource('beasiswa', BeasiswaController::class);
         Route::get('beasiswa/daftar', [BeasiswaController::class, 'daftar'])->name('landing.daftar');
         Route::resource('kriteria', KriteriaController::class);
+        Route::resource('peserta', PesertaController::class);
         Route::get('penilaian', [PenilaianController::class, 'index'])->name('penilaian.index');
        Route::get('laporan', [LaporanController::class, 'index'])->name('laporan.index');
     });
