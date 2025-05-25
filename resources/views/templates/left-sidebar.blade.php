@@ -56,7 +56,7 @@
                     <!-- Proses Seleksi -->
                     <li class="nav-header" style="font-size: 0.9rem; padding: 10px 15px; text-transform: uppercase; color: #6c757d; font-weight: 600;">PROSES SELEKSI</li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link {{ request()->routeIs('penilaian.penilain*') ? 'active' : '' }}" style="font-size: 16px; padding: 10px 15px;">
+                        <a href="{{ route('admin.penilaian.index') }}" class="nav-link {{ request()->routeIs('admin.penilaian.index*') ? 'active' : '' }}" style="font-size: 16px; padding: 10px 15px;">
                             <i class="nav-icon fas fa-edit"></i>
                             <p>
                                 Penilaian
