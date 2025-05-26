@@ -4,19 +4,29 @@ namespace App\Http\Controllers;
 
 use App\Models\Peserta;
 use App\Models\Beasiswa;
+use App\Models\HasilSeleksi;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PesertaController extends Controller
 {
+    public function dashboard()
+    {
+        $totalBeasiswa = \App\Models\Beasiswa::count();
+        $totalPendaftaran = Peserta::where('user_id', auth()->id())->count();
+        $totalLulus = Peserta::where('user_id', auth()->id())->where('status', 'Lulus')->count();
+        $daftarPendaftaran = Peserta::with('beasiswa')->where('user_id', auth()->id())->get();
+
+        return view('peserta.dashboard', compact('totalBeasiswa', 'totalPendaftaran', 'totalLulus', 'daftarPendaftaran'));
+    }
     // Menampilkan semua data peserta yang terdaftar oleh user yang login
     public function index()
     {
         // Mengambil data peserta yang terkait dengan user yang sedang login
-        $pesertas = Peserta::where('user_id', Auth::id())->get();
+        $peserta = Peserta::where('user_id', Auth::id())->get();
 
-        return view('admin.peserta', compact('pesertas'));
+        return view('admin.peserta', compact('peserta'));
     }
 
     // Menampilkan form untuk membuat peserta baru
@@ -64,7 +74,7 @@ class PesertaController extends Controller
             'beasiswa_id' => $request->beasiswa_id,
         ]);
 
-        return redirect()->route('pesertas.index')->with('success', 'Peserta berhasil ditambahkan.');
+        return redirect()->route('peserta.index')->with('success', 'Peserta berhasil ditambahkan.');
     }
 
     // Menampilkan form untuk mengedit peserta
@@ -72,7 +82,7 @@ class PesertaController extends Controller
     {
         $peserta = Peserta::findOrFail($id);
         $beasiswas = Beasiswa::all();
-        return view('pesertas.edit', compact('peserta', 'beasiswas'));
+        return view('peserta.edit', compact('peserta', 'beasiswas'));
     }
 
     // Memperbarui data peserta
@@ -95,7 +105,7 @@ class PesertaController extends Controller
         $peserta = Peserta::findOrFail($id);
         $peserta->update($request->all());
 
-        return redirect()->route('pesertas.index')->with('success', 'Peserta berhasil diperbarui.');
+        return redirect()->route('peserta.index')->with('success', 'Peserta berhasil diperbarui.');
     }
 
     // Menghapus peserta
@@ -104,6 +114,6 @@ class PesertaController extends Controller
         $peserta = Peserta::findOrFail($id);
         $peserta->delete();
 
-        return redirect()->route('pesertas.index')->with('success', 'Peserta berhasil dihapus.');
+        return redirect()->route('peserta.index')->with('success', 'Peserta berhasil dihapus.');
     }
 }

@@ -16,13 +16,13 @@ class HasilSeleksiExport implements FromCollection, WithHeadings
     public function collection()
     {
         // Mengambil data peserta dengan hasil seleksi mereka
-        return Peserta::with('beasiswaPeserta')->get()->map(function ($peserta) {
+        return Peserta::with('beasiswa')->get()->map(function ($peserta) {
             return [
                 'nama' => $peserta->nama,
-                'beasiswa' => $peserta->beasiswaPeserta->beasiswa->nama,
-                'nilai' => $peserta->beasiswaPeserta->nilai,
-                'status' => $peserta->beasiswaPeserta->status,
-                'nilai_akhir' => $peserta->beasiswaPeserta->nilai_akhir,
+                'beasiswa' => $peserta->beasiswa->nama ?? '-',
+                'nilai' => $peserta->nilai ?? '-',
+                'status' => $peserta->status ?? '-',
+                'nilai_akhir' => $peserta->nilai_akhir ?? '-',
             ];
         });
     }

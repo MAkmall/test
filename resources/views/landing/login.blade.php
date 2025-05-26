@@ -350,23 +350,20 @@
 
         <form method="POST" action="/login" data-parsley-validate>
             @csrf
-
-            <form method="POST" action="/login" data-parsley-validate>
-                @csrf
-                <div class="form-group position-relative has-icon-left mb-3">
-                    <input type="email" name="email" class="form-control" placeholder="Email" required>
-                    <div class="form-control-icon">
-                        <i class="bi bi-envelope"></i>
-                    </div>
+            <div class="form-group position-relative has-icon-left mb-3">
+                <input type="email" name="email" class="form-control" placeholder="Email" required>
+                <div class="form-control-icon">
+                    <i class="bi bi-envelope"></i>
                 </div>
-                <div class="form-group position-relative has-icon-left mb-3">
-                    <input type="password" name="password" class="form-control" placeholder="Password" required>
-                    <div class="form-control-icon">
-                        <i class="bi bi-shield-lock"></i>
-                    </div>
+            </div>
+            <div class="form-group position-relative has-icon-left mb-3">
+                <input type="password" name="password" class="form-control" placeholder="Password" required>
+                <div class="form-control-icon">
+                    <i class="bi bi-shield-lock"></i>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block shadow-lg mt-3">Masuk</button>
-            </form>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block shadow-lg mt-3">Masuk</button>
+        </form>
 
             <div class="remember-forgot">
                 <a href="#" class="forgot-password">Lupa password?</a>
@@ -375,56 +372,5 @@
             Belum punya akun? <a href="/register">Daftar di sini</a>
         </div>
     </div>
-
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const btn = document.querySelector('.btn-login');
-            const btnText = document.querySelector('.btn-text');
-            const errorMsg = document.getElementById('errorMessage');
-            const successMsg = document.getElementById('successMessage');
-            
-            // Hide messages
-            errorMsg.style.display = 'none';
-            successMsg.style.display = 'none';
-            
-            // Show loading
-            btn.classList.add('loading');
-            btnText.textContent = 'Memproses...';
-            
-            // Simulate login process
-            setTimeout(() => {
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-                
-                // Demo validation (replace with actual authentication)
-                if (email === 'admin@spkbeasiswa.com' && password === 'admin123') {
-                    successMsg.style.display = 'block';
-                    setTimeout(() => {
-                        // Redirect to dashboard
-                        alert('Berhasil login! Redirect ke dashboard...');
-                    }, 1500);
-                } else {
-                    errorMsg.style.display = 'block';
-                    btn.classList.remove('loading');
-                    btnText.textContent = 'Masuk';
-                }
-            }, 1500);
-        });
-
-        // Add input focus animations
-        document.querySelectorAll('.form-control').forEach(input => {
-            input.addEventListener('focus', function() {
-                this.parentElement.style.transform = 'scale(1.02)';
-            });
-            
-            input.addEventListener('blur', function() {
-                this.parentElement.style.transform = 'scale(1)';
-            });
-        });
-
-        // Demo credentials info
-    </script>
 </body>
 </html>

@@ -55,7 +55,7 @@
           <tbody>
             @foreach($hasilSeleksi as $hasil)
               <tr>
-                <td>{{ $hasil->peserta->nama }}</td>
+                <td>{{ $hasil->nama }}</td>
                 <td>{{ $hasil->beasiswa->nama }}</td>
                 <td>{{ $hasil->status }}</td>
                 <td>{{ $hasil->nilai_akhir }}</td>
