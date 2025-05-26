@@ -1,4 +1,4 @@
-saya mempunyai 2 code dashboard:"@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Dashboard')
 

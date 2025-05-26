@@ -67,7 +67,7 @@
                     <!-- Laporan -->
                     <li class="nav-header" style="font-size: 0.9rem; padding: 10px 15px; text-transform: uppercase; color: #6c757d; font-weight: 600;">LAPORAN</li>
                         <li class="nav-item">
-                            <a href="{{ ('laporan.index') }}" class="nav-link {{ request()->routeIs('laporan.index') ? 'active' : '' }}" style="font-size: 16px; padding: 10px 15px;">
+                            <a href="{{ route('admin.laporan.index') }}" class="nav-link {{ request()->routeIs('admin.laporan.index') ? 'active' : '' }}" style="font-size: 16px; padding: 10px 15px;">
                                 <i class="nav-icon fas fa-chart-bar"></i>
                                 <p>Hasil Seleksi</p>
                             </a>

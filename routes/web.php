@@ -37,7 +37,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::resource('kriteria', KriteriaController::class);
         Route::resource('peserta', PesertaController::class);
         Route::get('penilaian', [PenilaianController::class, 'index'])->name('penilaian.index');
-        Route::get('laporan', [LaporanController::class, 'index'])->name('laporan.index');
+        Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
         Route::get('admin/laporan/export/excel', [LaporanController::class, 'generateExcel'])->name('laporan.export.excel');
     });
 });
