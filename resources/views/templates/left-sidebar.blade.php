@@ -26,10 +26,17 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false" style="padding: 0;">
                 <!-- Dashboard -->
                 <li class="nav-item">
-                    <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" style="font-size: 16px; padding: 10px 15px;">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>Dashboard</p>
-                    </a>
+                    @if(auth()->check() && auth()->user()->role == 'admin')
+                        <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" style="font-size: 16px; padding: 10px 15px;">
+                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <p>Dashboard</p>
+                        </a>
+                    @elseif(auth()->check() && auth()->user()->role == 'peserta')
+                        <a href="{{ route('peserta.dashboard') }}" class="nav-link {{ request()->routeIs('peserta.dashboard') ? 'active' : '' }}" style="font-size: 16px; padding: 10px 15px;">
+                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <p>Dashboard</p>
+                        </a>
+                    @endif
                 </li>
 
                 @if(auth()->check() && auth()->user()->role == 'admin')

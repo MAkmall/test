@@ -50,18 +50,6 @@
             <!-- Info boxes -->
             <div class="row">
                 <div class="col-lg-3 col-6">
-                    <div class="small-box bg-info">
-                        <div class="inner">
-                            <h3>{{ $totalBeasiswa ?? 0 }}</h3>
-                            <p>Beasiswa Tersedia</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-graduation-cap"></i>
-                        </div>
-                        <a href="{{ route('landing.daftar') }}" class="small-box-footer">Lihat Beasiswa <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-6">
                     <div class="small-box bg-success">
                         <div class="inner">
                             <h3>{{ $totalPendaftaran ?? 0 }}</h3>

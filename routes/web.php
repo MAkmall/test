@@ -53,5 +53,6 @@ Route::middleware(['auth', 'role:peserta'])->group(function () {
         Route::get('riwayat', [PesertaController::class, 'riwayat'])->name('peserta.riwayat');
         Route::get('hasil/{peserta_id}', [PesertaController::class, 'hasil'])->name('peserta.hasil');
         Route::resource('peserta', PesertaController::class);
+        Route::get('/peserta/riwayat', [PesertaController::class, 'riwayat']);
     });
 });

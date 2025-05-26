@@ -116,4 +116,9 @@ class PesertaController extends Controller
 
         return redirect()->route('peserta.index')->with('success', 'Peserta berhasil dihapus.');
     }
+    public function riwayat()
+    {
+        // Logika atau tampilan yang ingin ditampilkan
+        return view('peserta.riwayat');
+    }
 }
