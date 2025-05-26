@@ -64,7 +64,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($pesertas as $peserta)
+                        @foreach($peserta as $peserta)
                             <tr class="border-b hover:bg-purple-50 transition duration-200">
                                 <td class="p-4 text-gray-700">{{ $peserta->nama }}</td>
                                 <td class="p-4 text-gray-700">{{ $peserta->tempat_tanggal_lahir }}</td>

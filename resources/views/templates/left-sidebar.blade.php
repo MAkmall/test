@@ -47,7 +47,7 @@
 
                     <!-- Peserta -->
                     <li class="nav-item">
-                        <a href="{{ route('admin.peserta.index') }}" class="nav-link {{ request()->routeIs('peserta') ? 'active' : '' }}" style="font-size: 16px; padding: 10px 15px;">
+                        <a href="{{ route('admin.peserta.index') }}" class="nav-link {{ request()->routeIs('admin.peserta.*') ? 'active' : '' }}" style="font-size: 16px; padding: 10px 15px;">
                             <i class="nav-icon fas fa-users"></i>
                             <p>Info</p>
                         </a>
