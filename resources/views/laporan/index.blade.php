@@ -11,19 +11,6 @@
       <div class="card-body">
         <!-- Filter atau opsi pencarian -->
         <form action="{{ route('admin.laporan.index') }}" method="GET" class="mb-3">
-          <div class="row">
-            <div class="col-md-3">
-              <label for="beasiswa_id">Beasiswa</label>
-              <select name="beasiswa_id" id="beasiswa_id" class="form-control">
-                <option value="">-- Pilih Beasiswa --</option>
-                @foreach($beasiswas as $beasiswa)
-                  <option value="{{ $beasiswa->id }}" {{ request('beasiswa_id') == $beasiswa->id ? 'selected' : '' }}>
-                    {{ $beasiswa->nama }}
-                  </option>
-                @endforeach
-              </select>
-            </div>
-
             <div class="col-md-3">
               <label for="status">Status</label>
               <select name="status" id="status" class="form-control">
@@ -46,7 +33,6 @@
           <thead>
             <tr>
               <th>Nama Peserta</th>
-              <th>Beasiswa</th>
               <th>Status</th>
               <th>Nilai Akhir</th>
               <th>Aksi</th>
@@ -56,7 +42,6 @@
             @foreach($hasilSeleksi as $hasil)
               <tr>
                 <td>{{ $hasil->nama }}</td>
-                <td>{{ $hasil->beasiswa->nama }}</td>
                 <td>{{ $hasil->status }}</td>
                 <td>{{ $hasil->nilai_akhir }}</td>
                 <td>

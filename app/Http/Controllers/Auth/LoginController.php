@@ -58,10 +58,10 @@ class LoginController extends Controller
             return redirect('/admin');
         } else if (Auth::attempt(array('email' => $email, 'password' => $password, 'role' => 'peserta'))) {
             $request->session()->regenerate();
-            return redirect('/peserta/dashboard');
+            return redirect('/peserta');
         }
 
-        return redirect('/login')->with('salah', 'Email atau kata sandi Anda salah!');
+        return redirect('/')->with('salah', 'Email atau kata sandi Anda salah!');
     }
 }
 

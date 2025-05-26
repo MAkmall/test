@@ -14,16 +14,9 @@ class BeasiswaKriteria extends Model
 
     // Tentukan kolom yang bisa diisi secara mass-assignment
     protected $fillable = [
-        'beasiswa_id',
         'kriteria_id',
         'bobot',
     ];
-
-    // Relasi dengan Beasiswa
-    public function beasiswa()
-    {
-        return $this->belongsTo(Beasiswa::class);
-    }
 
     // Relasi dengan Kriteria
     public function kriteria()

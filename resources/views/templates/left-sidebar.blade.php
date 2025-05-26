@@ -32,7 +32,7 @@
                             <p>Dashboard</p>
                         </a>
                     @elseif(auth()->check() && auth()->user()->role == 'peserta')
-                        <a href="{{ route('peserta.dashboard') }}" class="nav-link {{ request()->routeIs('peserta.dashboard') ? 'active' : '' }}" style="font-size: 16px; padding: 10px 15px;">
+                        <a href="{{ route('landing.dashboard') }}" class="nav-link {{ request()->routeIs('landing.dashboard') ? 'active' : '' }}" style="font-size: 16px; padding: 10px 15px;">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>Dashboard</p>
                         </a>
@@ -61,52 +61,24 @@
                     </li>
 
                     <!-- Proses Seleksi -->
-                    <li class="nav-header" style="font-size: 0.9rem; padding: 10px 15px; text-transform: uppercase; color: #6c757d; font-weight: 600;">PROSES SELEKSI</li>
+                    <li class="nav-header" style="font-size: 0.9rem; padding: 10px 15px; text-transform: uppercase; color: #6c757d; font-weight: 600;"></li>
                     <li class="nav-item">
-                        <a href="{{ route('admin.penilaian.index') }}" class="nav-link {{ request()->routeIs('admin.penilaian.index*') ? 'active' : '' }}" style="font-size: 16px; padding: 10px 15px;">
+                        <a href="{{ route('admin.penilaian.index') }}" class="nav-link {{ request()->routeIs('admin.penilaian.index.*') ? 'active' : '' }}" style="font-size: 16px; padding: 10px 15px;">
                             <i class="nav-icon fas fa-edit"></i>
                             <p>
                                 Penilaian
                             </p>
                         </a>
                     </li>
-
-                    <!-- Laporan -->
-                    <li class="nav-header" style="font-size: 0.9rem; padding: 10px 15px; text-transform: uppercase; color: #6c757d; font-weight: 600;">LAPORAN</li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.laporan.index') }}" class="nav-link {{ request()->routeIs('admin.laporan.index') ? 'active' : '' }}" style="font-size: 16px; padding: 10px 15px;">
-                                <i class="nav-icon fas fa-chart-bar"></i>
-                                <p>Hasil Seleksi</p>
-                            </a>
-                        </li>
                 @endif
 
                 @if(auth()->check() && auth()->user()->role == 'peserta')
-                    <!-- Menu Peserta -->
-                 
+                    <!-- Menu Peserta -->>
                     <li class="nav-item">
-                        <a href="{{ route('landing.daftar') }}" class="nav-link {{ request()->routeIs('landing.daftar') ? 'active' : '' }}" style="font-size: 16px; padding: 10px 15px;">
-                            <i class="nav-icon fas fa-pencil-alt"></i>
-                            <p>Daftar Beasiswa</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('peserta.riwayat') }}" class="nav-link {{ request()->routeIs('peserta.riwayat') ? 'active' : '' }}" style="font-size: 16px; padding: 10px 15px;">
-                            <i class="nav-icon fas fa-history"></i>
-                            <p>Riwayat Beasiswa</p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        @if(auth()->check() && auth()->user()->peserta)
-                            <a href="{{ route('peserta.hasil', ['peserta_id' => auth()->user()->peserta->id]) }}" class="nav-link {{ request()->routeIs('peserta.hasil') ? 'active' : '' }}" style="font-size: 16px; padding: 10px 15px;">
+                            <a href="{{ route('landing.status') }}" class="nav-link {{ request()->routeIs('landing.status') ? 'active' : '' }}" style="font-size: 16px; padding: 10px 15px;">
                                 <i class="nav-icon fas fa-trophy"></i>
                                 <p>Hasil Beasiswa</p>
                             </a>
-                        @else
-                            <!-- Perbaikan: Hapus referensi ke route yang tidak ada -->
-                            <p style="padding: 10px 15px; color: #6c757d; font-size: 14px;">Anda belum terdaftar sebagai peserta.</p>
-                        @endif
                     </li>
                 @endif
 

@@ -13,20 +13,15 @@ class LaporanController extends Controller
     // Menampilkan halaman laporan hasil seleksi
     public function index(Request $request)
     {
-        $beasiswas = \App\Models\Beasiswa::all();
+        $query = \App\Models\Peserta::with('peserta');
 
-        $query = \App\Models\Peserta::with('beasiswa');
-
-        if ($request->filled('beasiswa_id')) {
-            $query->where('beasiswa_id', $request->beasiswa_id);
-        }
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
         $hasilSeleksi = $query->paginate(10);
 
-        return view('laporan.index', compact('hasilSeleksi', 'beasiswas'));
+        return view('laporan.index', compact('hasilSeleksi'));
     }
 
     // Menampilkan hasil seleksi untuk peserta

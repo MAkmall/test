@@ -54,7 +54,6 @@
                             <th class="p-4 text-sm font-semibold">Nama Peserta</th>
                             <th class="p-4 text-sm font-semibold">Tempat Tanggal Lahir</th>
                             <th class="p-4 text-sm font-semibold">Alamat</th>
-                            <th class="p-4 text-sm font-semibold">Beasiswa</th>
                             <th class="p-4 text-sm font-semibold">IPK</th>
                             <th class="p-4 text-sm font-semibold">Semester</th>
                             <th class="p-4 text-sm font-semibold">Penghasilan Orang Tua</th>
@@ -69,7 +68,6 @@
                                 <td class="p-4 text-gray-700">{{ $peserta->nama }}</td>
                                 <td class="p-4 text-gray-700">{{ $peserta->tempat_tanggal_lahir }}</td>
                                 <td class="p-4 text-gray-700">{{ $peserta->alamat }}</td>
-                                <td class="p-4 text-gray-700">{{ $peserta->beasiswa->nama }}</td>
                                 <td class="p-4 text-gray-700">{{ $peserta->ipk }}</td>
                                 <td class="p-4 text-gray-700">{{ $peserta->semester }}</td>
                                 <td class="p-4 text-gray-700">{{ number_format($peserta->penghasilan_orang_tua, 2, ',', '.') }}</td>

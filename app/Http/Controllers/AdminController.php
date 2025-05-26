@@ -16,31 +16,6 @@ class AdminController extends Controller
         return view('dashboard');
     }
 
-    // Menampilkan daftar beasiswa
-    public function indexBeasiswa()
-    {
-        $beasiswas = Beasiswa::all();
-        return view('admin.beasiswa.index', compact('beasiswas'));
-    }
-
-    // Menambahkan beasiswa baru
-    public function createBeasiswa()
-    {
-        return view('admin.beasiswa.create');
-    }
-
-    // Menyimpan beasiswa yang baru dibuat
-    public function storeBeasiswa(Request $request)
-    {
-        $request->validate([
-            'nama' => 'required|string|max:255',
-            'keterangan' => 'required|string',
-        ]);
-        
-        Beasiswa::create($request->all());
-        return redirect()->route('admin.beasiswa.index');
-    }
-
     // Menampilkan halaman pengelolaan peserta
     public function indexPeserta()
     {

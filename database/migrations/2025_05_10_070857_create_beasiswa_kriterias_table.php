@@ -10,7 +10,6 @@ return new class extends Migration
     {
         Schema::create('beasiswa_kriterias', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('beasiswa_id');
             $table->unsignedBigInteger('kriteria_id');
             $table->decimal('bobot', 5, 2);
             $table->timestamps();

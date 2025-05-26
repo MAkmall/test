@@ -1,78 +1,81 @@
 @extends('layouts.app')
 
-@section('title', 'Daftar Beasiswa')
+@section('title', 'Form Pendaftaran Beasiswa')
 
 @section('content')
-<div class="container py-4">
-    <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">
-                <i class="fas fa-graduation-cap me-2"></i>Daftar Beasiswa Tersedia
-            </h4>
-        </div>
-        
-        <div class="card-body">
-            @if(session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
+<div style="max-width: 600px; margin: auto;">
+    <h2>Form Pendaftaran Beasiswa</h2>
 
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead class="table-light">
-                        <tr>
-                            <th>#</th>
-                            <th>Nama Beasiswa</th>
-                            <th>Batas Pendaftaran</th>
-                            <th>Pendaftar</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($beasiswas as $index => $beasiswa)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>
-                                <strong>{{ $beasiswa->nama }}</strong>
-                                <p class="text-muted small mb-0">{{ Str::limit($beasiswa->deskripsi, 50) }}</p>
-                            </td>
-                            <td>
-                                @if($beasiswa->batas_pendaftaran)
-                                    {{ \Carbon\Carbon::parse($beasiswa->batas_pendaftaran)->format('d M Y') }}
-                                    <br>
-                                    <small class="text-muted">
-                                        {{ \Carbon\Carbon::parse($beasiswa->batas_pendaftaran)->isPast() ? 'Sudah ditutup' : 'Masih dibuka' }}
-                                    </small>
-                                @else
-                                    <span class="text-muted">-</span>
-                                @endif
-                            </td>
-                            <td>{{ $beasiswa->peserta_count ?? 0 }} orang</td>
-                            <td>
-                                @if(!$beasiswa->batas_pendaftaran || !\Carbon\Carbon::parse($beasiswa->batas_pendaftaran)->isPast())
-                                    <a href="{{ route('beasiswa.pendaftaran', $beasiswa->id) }}" class="btn btn-sm btn-primary">
-                                        <i class="fas fa-file-alt me-1"></i>Daftar
-                                    </a>
-                                @else
-                                    <button class="btn btn-sm btn-secondary" disabled>
-                                        <i class="fas fa-file-alt me-1"></i>Ditutup
-                                    </button>
-                                @endif
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="5" class="text-center py-4">
-                                <i class="fas fa-info-circle fa-2x text-muted mb-3"></i>
-                                <h5 class="text-muted">Tidak ada beasiswa tersedia saat ini</h5>
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+    @if ($errors->any())
+        <div style="color: red;">
+            <strong>Terjadi kesalahan:</strong>
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
-    </div>
+    @endif
+
+    <form action="{{ route('pendaftaran.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+
+        <label>Nama:</label>
+        <input type="text" name="nama" value="{{ old('nama') }}" required><br>
+
+        <label>Tempat & Tanggal Lahir:</label>
+        <input type="date" name="tempat_tanggal_lahir" value="{{ old('tempat_tanggal_lahir') }}" required><br>
+
+        <label>Alamat:</label>
+        <textarea name="alamat" required>{{ old('alamat') }}</textarea><br>
+
+        <label>Semester:</label>
+        <input type="text" name="semester" value="{{ old('semester') }}" required><br>
+
+        <label>Jumlah Tanggungan Keluarga:</label>
+        <input type="text" name="tanggungan" value="{{ old('tanggungan') }}" required><br>
+
+        <label>Penghasilan Orang Tua (Rp):</label>
+        <input type="number" name="penghasilan_orang_tua" value="{{ old('penghasilan_orang_tua') }}" required><br>
+
+        <label>IPK:</label>
+        <input type="number" step="0.01" name="ipk" value="{{ old('ipk') }}" min="0" max="4" required><br>
+
+        <label>Foto Transkrip Nilai:</label>
+        <input type="file" name="transkrip" accept="image/*" required><br>
+
+        <label>Foto Prestasi (Opsional):</label>
+        <input type="file" name="prestasi" accept="image/*"><br>
+
+        <label>Foto Surat Aktif Kuliah:</label>
+        <input type="file" name="surat_aktif_kuliah" accept="image/*" required><br>
+
+        <button type="submit" style="margin-top: 15px;">Kirim</button>
+    </form>
 </div>
+
+<style>
+    form label {
+        display: block;
+        margin-top: 10px;
+    }
+
+    input, textarea {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+</style>
 @endsection

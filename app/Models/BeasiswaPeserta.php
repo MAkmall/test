@@ -17,12 +17,6 @@ class BeasiswaPeserta extends Model
         'nilai_akhir',
     ];
 
-    // Relasi dengan model Beasiswa
-    public function beasiswa()
-    {
-        return $this->belongsTo(Beasiswa::class);
-    }
-
     // Relasi dengan model Peserta
     public function peserta()
     {

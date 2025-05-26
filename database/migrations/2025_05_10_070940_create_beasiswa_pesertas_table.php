@@ -11,7 +11,6 @@ return new class extends Migration
         Schema::create('beasiswa_pesertas', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('peserta_id'); // Relasi ke peserta
-            $table->unsignedBigInteger('beasiswa_id'); // Relasi ke beasiswa
             $table->decimal('nilai', 5, 2); // Nilai yang diberikan untuk peserta
             $table->string('status'); // Status kelulusan (Lulus/Tidak Lulus)
             $table->decimal('nilai_akhir', 5, 2); // Nilai akhir

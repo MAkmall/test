@@ -31,11 +31,6 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
-    public function beasiswa()
-    {
-        return $this->belongsToMany(Beasiswa::class);
-    }
-
     public function peserta()
     {
         return $this->hasOne(Peserta::class); // Relasi one-to-one

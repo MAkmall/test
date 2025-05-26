@@ -3,45 +3,46 @@
 namespace App\Http\Controllers;
 
 use App\Models\Peserta;
-use App\Models\Beasiswa;
-use App\Models\HasilSeleksi;
-use App\Models\User;
+use App\Models\PenilaianPeserta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PesertaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function dashboard()
     {
-        $totalBeasiswa = \App\Models\Beasiswa::count();
-        $totalPendaftaran = Peserta::where('user_id', auth()->id())->count();
-        $totalLulus = Peserta::where('user_id', auth()->id())->where('status', 'Lulus')->count();
-        $daftarPendaftaran = Peserta::with('beasiswa')->where('user_id', auth()->id())->get();
+        $totalPendaftaran = Peserta::where('user_id', Auth::id())->count();
+        $totalLulus = Peserta::where('user_id', Auth::id())->where('status', 'lolos')->count();
+        $daftarPendaftaran = Peserta::where('user_id', Auth::id())->get();
 
-        return view('peserta.dashboard', compact('totalBeasiswa', 'totalPendaftaran', 'totalLulus', 'daftarPendaftaran'));
+        return view('peserta.dashboard', compact('totalPendaftaran', 'totalLulus', 'daftarPendaftaran'));
     }
-    // Menampilkan semua data peserta yang terdaftar oleh user yang login
+
     public function index()
     {
-        // Mengambil data peserta yang terkait dengan user yang sedang login
-        $peserta = Peserta::where('user_id', Auth::id())->get();
-
+        if (Auth::user()->is_admin) {
+        $peserta = Peserta::all(); // admin lihat semua
+        } else {
+        $peserta = Peserta::where('user_id', Auth::id())->get(); // user hanya lihat datanya
+        }
         return view('admin.peserta', compact('peserta'));
     }
 
-    // Menampilkan form untuk membuat peserta baru
     public function create()
     {
-        $beasiswas = Beasiswa::all();  // Menampilkan daftar beasiswa
-        return view('landing.daftar', compact('beasiswas'));
+        return view('landing.dashboard');
     }
 
-        public function daftar()
+    public function daftar()
     {
         return view('landing.daftar');
     }
 
-    // Menyimpan peserta baru
     public function store(Request $request)
     {
         $request->validate([
@@ -52,13 +53,15 @@ class PesertaController extends Controller
             'tanggungan' => 'required|string',
             'penghasilan_orang_tua' => 'required|numeric',
             'ipk' => 'required|numeric|between:0,4',
-            'transkrip' => 'required|string',
-            'prestasi' => 'nullable|string',
-            'surat_aktif_kuliah' => 'required|string',
-            'beasiswa_id' => 'required|exists:beasiswas,id',
+            'transkrip' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'prestasi' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'surat_aktif_kuliah' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // Menyimpan data peserta yang terhubung dengan user yang sedang login
+        $transkripPath = $request->file('transkrip')->store('transkrip', 'public');
+        $prestasiPath = $request->file('prestasi')?->store('prestasi', 'public');
+        $suratAktifKuliahPath = $request->file('surat_aktif_kuliah')->store('surat_aktif', 'public');
+
         Peserta::create([
             'user_id' => Auth::id(),
             'nama' => $request->nama,
@@ -68,24 +71,22 @@ class PesertaController extends Controller
             'tanggungan' => $request->tanggungan,
             'penghasilan_orang_tua' => $request->penghasilan_orang_tua,
             'ipk' => $request->ipk,
-            'transkrip' => $request->transkrip,
-            'prestasi' => $request->prestasi,
-            'surat_aktif_kuliah' => $request->surat_aktif_kuliah,
-            'beasiswa_id' => $request->beasiswa_id,
+            'transkrip' => $transkripPath,
+            'prestasi' => $prestasiPath,
+            'surat_aktif_kuliah' => $suratAktifKuliahPath,
+            'status' => 'pending',
         ]);
 
-        return redirect()->route('peserta.index')->with('success', 'Peserta berhasil ditambahkan.');
+
+        return redirect()->route('landing.daftar')->with('success', 'Pendaftaran berhasil.');
     }
 
-    // Menampilkan form untuk mengedit peserta
     public function edit($id)
     {
-        $peserta = Peserta::findOrFail($id);
-        $beasiswas = Beasiswa::all();
-        return view('peserta.edit', compact('peserta', 'beasiswas'));
+        $peserta = Peserta::where('user_id', Auth::id())->findOrFail($id);
+        return view('peserta.edit', compact('peserta'));
     }
 
-    // Memperbarui data peserta
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -99,26 +100,45 @@ class PesertaController extends Controller
             'transkrip' => 'required|string',
             'prestasi' => 'nullable|string',
             'surat_aktif_kuliah' => 'required|string',
-            'beasiswa_id' => 'required|exists:beasiswas,id',
         ]);
 
-        $peserta = Peserta::findOrFail($id);
-        $peserta->update($request->all());
+        $peserta = Peserta::where('user_id', Auth::id())->findOrFail($id);
+        $peserta->update($request->only([
+            'nama',
+            'tempat_tanggal_lahir',
+            'alamat',
+            'semester',
+            'tanggungan',
+            'penghasilan_orang_tua',
+            'ipk',
+            'transkrip',
+            'prestasi',
+            'surat_aktif_kuliah',
+        ]));
 
-        return redirect()->route('peserta.index')->with('success', 'Peserta berhasil diperbarui.');
+        return redirect()->route('peserta.index')->with('success', 'Data peserta berhasil diperbarui.');
     }
 
-    // Menghapus peserta
     public function destroy($id)
     {
-        $peserta = Peserta::findOrFail($id);
+        $peserta = Peserta::where('user_id', Auth::id())->findOrFail($id);
         $peserta->delete();
-
         return redirect()->route('peserta.index')->with('success', 'Peserta berhasil dihapus.');
     }
+
+    public function status()
+    {
+        $peserta = Peserta::where('user_id', Auth::id())->first();
+
+        return view('landing.status', [
+            'status' => $peserta->status,
+            'nilai_akhir' => $peserta->penilaian->first()->nilai_akhir ?? 'Belum dinilai',
+        ]);
+    }
+
     public function riwayat()
     {
-        // Logika atau tampilan yang ingin ditampilkan
-        return view('peserta.riwayat');
+        $peserta = Peserta::where('user_id', Auth::id())->with('penilaian.kriteria')->first();
+        return view('peserta.riwayat', compact('peserta'));
     }
 }

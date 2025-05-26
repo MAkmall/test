@@ -14,7 +14,6 @@
           <div class="col-md-6">
             <h5><strong>Nama Peserta:</strong> {{ $hasilSeleksi->peserta->nama }}</h5>
             <p><strong>Nomor Induk Mahasiswa (NIM):</strong> {{ $hasilSeleksi->peserta->nim }}</p>
-            <p><strong>Beasiswa:</strong> {{ $hasilSeleksi->beasiswa->nama }}</p>
             <p><strong>Status:</strong> {{ $hasilSeleksi->status }}</p>
             <p><strong>Nilai Akhir:</strong> {{ number_format($hasilSeleksi->nilai_akhir, 2) }}</p>
           </div>

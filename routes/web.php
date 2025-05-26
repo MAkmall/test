@@ -29,14 +29,17 @@ Route::group(['middleware' => ['auth', 'role:admin']], function () {
     Route::get('/admin', [DashboardController::class, 'index'])->name ('admin.dashboard');
 });
 
+Route::group(['middleware' => ['auth', 'role:peserta']], function () {
+    Route::get('/peserta', [PesertaController::class, 'create'])->name ('admin.dashboard');
+});
+
 Route::middleware(['auth', 'role:admin'])->group(function () {
     // Admin Routes
     Route::prefix('admin')->name('admin.')->group(function () {
-        Route::resource('beasiswa', BeasiswaController::class);
-        Route::get('beasiswa/daftar', [BeasiswaController::class, 'daftar'])->name('landing.daftar');
         Route::resource('kriteria', KriteriaController::class);
         Route::resource('peserta', PesertaController::class);
-        Route::get('penilaian', [PenilaianController::class, 'index'])->name('penilaian.index');
+        Route::resource('penilaian', PenilaianController::class);
+        Route::get('/penilaian', [PenilaianController::class, 'index'])->name('penilaian.index');
         Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
         Route::get('admin/laporan/export/excel', [LaporanController::class, 'generateExcel'])->name('laporan.export.excel');
     });
@@ -45,14 +48,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 Route::middleware(['auth', 'role:peserta'])->group(function () {
     Route::prefix('peserta')->group(function () {
-        Route::get('dashboard', [PesertaController::class, 'dashboard'])->name('peserta.dashboard');
-        Route::get('landing.daftar', [BeasiswaController::class, 'daftar'])->name('landing.daftar');
-        Route::get('landing.pendaftaran', [BeasiswaController::class, 'mendaftar'])->name('landing.pendaftaran');
-        Route::get('/beasiswa/daftar', [PesertaController::class, 'daftar'])->name('beasiswa.daftar'); // Alihkan ke PesertaController
-        Route::post('/beasiswa/register/{beasiswa}', [PesertaController::class, 'submitDaftar'])->name('beasiswa.register');
-        Route::get('riwayat', [PesertaController::class, 'riwayat'])->name('peserta.riwayat');
-        Route::get('hasil/{peserta_id}', [PesertaController::class, 'hasil'])->name('peserta.hasil');
-        Route::resource('peserta', PesertaController::class);
-        Route::get('/peserta/riwayat', [PesertaController::class, 'riwayat']);
+        Route::get('peserta', [PesertaController::class, 'create'])->name('landing.dashboard');
+        Route::get('peserta/status', [PesertaController::class, 'status'])->name('landing.status');
+        Route::get('/pendaftaran', [PesertaController::class, 'daftar'])->name('pendaftaran');
+        Route::post('/pendaftaran', [PesertaController::class, 'store'])->name('pendaftaran.store');
     });
 });

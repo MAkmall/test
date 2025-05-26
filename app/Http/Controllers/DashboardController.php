@@ -14,7 +14,6 @@ class DashboardController extends Controller
     public function index()
     {
         // Hitung total data untuk statistik
-        $beasiswaCount = Beasiswa::count();
         $pesertaCount = Peserta::count();
         $kriteriaCount = Kriteria::count();
         $laporanCount = BeasiswaPeserta::whereNotNull('nilai_akhir')->count();
@@ -43,7 +42,6 @@ class DashboardController extends Controller
         ];
 
         return view('admin.dashboard', compact(
-            'beasiswaCount', 
             'pesertaCount', 
             'kriteriaCount', 
             'laporanCount',

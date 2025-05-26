@@ -11,9 +11,9 @@ return new class extends Migration
         Schema::create('kriterias', function (Blueprint $table) {
             $table->id();
             $table->string('nama');  // Nama kriteria
-            $table->string('jenis');  // Jenis kriteria (misalnya: akademik, non-akademik)
+            $table->enum('jenis', ['benefit', 'cost']);  // Jenis kriteria (misalnya: akademik, non-akademik)
             $table->decimal('bobot', 5, 2);  // Bobot kriteria
-            $table->text('deskripsi');  // Deskripsi kriteria
+            $table->text('deskripsi')->nullable();  // Deskripsi kriteria
             $table->timestamps();  // Kolom created_at dan updated_at
         });
     }

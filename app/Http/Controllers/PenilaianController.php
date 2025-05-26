@@ -3,56 +3,47 @@
 namespace App\Http\Controllers;
 
 use App\Models\Peserta;
-use App\Models\Beasiswa;
 use App\Models\Kriteria;
-use App\Models\BeasiswaPeserta;
+use App\Models\PenilaianPeserta;
 use App\Services\SAWService;
 use Illuminate\Http\Request;
 
 class PenilaianController extends Controller
 {
-    // Menampilkan daftar peserta yang terdaftar pada beasiswa tertentu
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-        // Ambil beasiswa aktif atau pertama
-        $beasiswa = Beasiswa::first();
-        $results = [];
-        if ($beasiswa) {
-            $sawService = new \App\Services\SAWService();
-            $results = $sawService->hitung($beasiswa->id);
-        }
-        return view('admin.penilaian.index', compact('beasiswa', 'results'));
+        $pesertas = Peserta::with('penilaian')->get();
+        $sawService = new SAWService();
+        $results = $sawService->hitung();
+
+        return view('admin.penilaian.index', compact('pesertas', 'results'));
     }
 
-    // Menampilkan form untuk menilai peserta
-    public function create($beasiswa_id, $peserta_id)
+    public function create($peserta_id)
     {
-        $beasiswa = Beasiswa::findOrFail($beasiswa_id);
         $peserta = Peserta::findOrFail($peserta_id);
         $kriterias = Kriteria::all();
-
-        return view('admin.penilaian.create', compact('beasiswa', 'peserta', 'kriterias'));
+        return view('admin.penilaian.create', compact('peserta', 'kriterias'));
     }
 
-    // Menyimpan penilaian peserta
-    public function store(Request $request, $beasiswa_id, $peserta_id)
+    public function store(Request $request, $peserta_id)
     {
-        // Validasi data penilaian
         $request->validate([
             'nilai' => 'required|array',
-            'nilai.*' => 'required|numeric',
+            'nilai.*' => 'required|numeric|min:0',
         ]);
 
-        // Mencari peserta dan beasiswa yang akan dinilai
         $peserta = Peserta::findOrFail($peserta_id);
-        $beasiswa = Beasiswa::findOrFail($beasiswa_id);
 
-        // Simpan nilai untuk setiap kriteria
         foreach ($request->nilai as $kriteria_id => $nilai) {
-            BeasiswaPeserta::updateOrCreate(
+            PenilaianPeserta::updateOrCreate(
                 [
                     'peserta_id' => $peserta_id,
-                    'beasiswa_id' => $beasiswa_id,
                     'kriteria_id' => $kriteria_id,
                 ],
                 [
@@ -61,27 +52,77 @@ class PenilaianController extends Controller
             );
         }
 
-        // Hitung hasil akhir berdasarkan nilai yang diberikan dan metode SAW
         $sawService = new SAWService();
-        $nilaiAkhir = $sawService->hitung($peserta_id);
+        $results = $sawService->hitung();
+        $result = $results[$peserta_id] ?? ['nilai_akhir' => 0, 'status' => 'tidak_lolos'];
 
-        // Menyimpan hasil akhir
-        BeasiswaPeserta::where('peserta_id', $peserta_id)
-            ->where('beasiswa_id', $beasiswa_id)
-            ->update(['nilai_akhir' => $nilaiAkhir]);
+        PenilaianPeserta::where('peserta_id', $peserta_id)
+            ->update(['nilai_akhir' => $result['nilai_akhir']]);
+        $peserta->update(['status' => $result['status']]);
 
-        return redirect()->route('admin.penilaian.index', $beasiswa_id)
-            ->with('success', 'Penilaian berhasil disimpan dan hasil dihitung');
+        return redirect()->route('admin.penilaian.index')
+            ->with('success', 'Penilaian berhasil disimpan dan status diperbarui.');
     }
 
-    // Menampilkan hasil penilaian untuk peserta
-    public function show($beasiswa_id, $peserta_id)
+    public function show($peserta_id)
     {
-        $beasiswa = Beasiswa::findOrFail($beasiswa_id);
         $peserta = Peserta::findOrFail($peserta_id);
-        $penilaian = BeasiswaPeserta::where('peserta_id', $peserta_id)
-                                    ->where('beasiswa_id', $beasiswa_id)
-                                    ->first();
-        return view('admin.penilaian.show', compact('beasiswa', 'peserta', 'penilaian'));
+        $penilaian = PenilaianPeserta::where('peserta_id', $peserta_id)
+                                     ->with('kriteria')
+                                     ->get();
+        return view('admin.penilaian.show', compact('peserta', 'penilaian'));
+    }
+
+    public function edit($peserta_id)
+    {
+        $peserta = Peserta::findOrFail($peserta_id);
+        $kriterias = Kriteria::all();
+        $penilaian = PenilaianPeserta::where('peserta_id', $peserta_id)
+                                     ->pluck('nilai', 'kriteria_id')
+                                     ->toArray();
+        return view('admin.penilaian.edit', compact('peserta', 'kriterias', 'penilaian'));
+    }
+
+    public function update(Request $request, $peserta_id)
+    {
+        $request->validate([
+            'nilai' => 'required|array',
+            'nilai.*' => 'required|numeric|min:0',
+        ]);
+
+        $peserta = Peserta::findOrFail($peserta_id);
+
+        foreach ($request->nilai as $kriteria_id => $nilai) {
+            PenilaianPeserta::updateOrCreate(
+                [
+                    'peserta_id' => $peserta_id,
+                    'kriteria_id' => $kriteria_id,
+                ],
+                [
+                    'nilai' => $nilai,
+                ]
+            );
+        }
+
+        $sawService = new SAWService();
+        $results = $sawService->hitung();
+        $result = $results[$peserta_id] ?? ['nilai_akhir' => 0, 'status' => 'tidak_lolos'];
+
+        PenilaianPeserta::where('peserta_id', $peserta_id)
+            ->update(['nilai_akhir' => $result['nilai_akhir']]);
+        $peserta->update(['status' => $result['status']]);
+
+        return redirect()->route('admin.penilaian.index')
+            ->with('success', 'Penilaian berhasil diperbarui dan status diperbarui.');
+    }
+
+    public function destroy($peserta_id)
+    {
+        $peserta = Peserta::findOrFail($peserta_id);
+        PenilaianPeserta::where('peserta_id', $peserta_id)->delete();
+        $peserta->update(['status' => 'pending']);
+
+        return redirect()->route('admin.penilaian.index')
+            ->with('success', 'Penilaian peserta berhasil dihapus dan status direset.');
     }
 }
